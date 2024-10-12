@@ -30,12 +30,6 @@ variable "recreate_ssh_keys" {
   }
 }
 
-variable "ssh_key_passphrase" {
-  description = "Passphrase for the SSH keys used in the infrastructure"
-  type        = string
-  sensitive   = true
-}
-
 variable "network_zone" {
   description = "Network zone for the subnets: 'eu-central' or 'eu-west', default is 'eu-central'"
   type        = string

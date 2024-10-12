@@ -1,26 +1,22 @@
 # Random passwords for SSH keys
 resource "random_password" "cluster_worker_ssh_key_password" {
   length           = 32
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 resource "random_password" "cluster_control_ssh_key_password" {
   length           = 32
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 resource "random_password" "db_ssh_key_password" {
   length           = 32
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 resource "random_password" "redis_ssh_key_password" {
   length           = 32
-  special          = true
-  override_special = "_%@"
+  special          = false
 }
 
 # External data sources for SSH keys
