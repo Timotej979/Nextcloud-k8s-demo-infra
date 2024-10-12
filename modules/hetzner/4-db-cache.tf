@@ -9,15 +9,15 @@ resource "hcloud_server" "db" {
   # IP address:
     # 10.0.2.10
   network {
-    network_id = hcloud_subnet.private_db.id
-    ip         = "${cidrhost(var.public_subnet_cidr, 10)}"
+    network_id = hcloud_network.vpc.id
+    ip         = "${cidrhost(var.private_db_subnet_cidr, 10)}"
   }
   labels = {
     project     = var.project
     environment = var.environment
     role        = "db"
   }
-  depends_on = [ hcloud_subnet.private_db, hcloud_ssh_key.cluster_controls ]
+  depends_on = [ hcloud_network_subnet.private_db, hcloud_ssh_key.cluster_controls ]
 }
 
 # Create a Redis server
@@ -31,7 +31,7 @@ resource "hcloud_server" "redis" {
   # IP address:
     # 10.0.3.10
   network {
-    network_id = hcloud_subnet.private_redis.id
+    network_id = hcloud_network.vpc.id
     ip         = "${cidrhost(var.private_redis_subnet_cidr, 10)}"
   }
   labels = {
@@ -39,5 +39,5 @@ resource "hcloud_server" "redis" {
     environment = var.environment
     role        = "redis"
   }
-  depends_on = [ hcloud_subnet.private_redis, hcloud_ssh_key.cluster_controls ]
+  depends_on = [ hcloud_network_subnet.private_redis, hcloud_ssh_key.cluster_controls ]
 }

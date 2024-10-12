@@ -44,6 +44,7 @@ resource "hcloud_firewall" "control_plane_firewall" {
   apply_to {
     label_selector = "role=control-plane"
   }
+  depends_on = [ hcloud_network_subnet.public ]
 }
 
 # Firewall for Worker Nodes
@@ -80,6 +81,7 @@ resource "hcloud_firewall" "worker_firewall" {
   apply_to {
     label_selector = "role=worker"
   }
+  depends_on = [ hcloud_network_subnet.public ]
 }
 
 # Firewall for PostgreSQL Database
@@ -109,6 +111,7 @@ resource "hcloud_firewall" "db_firewall" {
   apply_to {
     label_selector = "role=db"
   }
+  depends_on = [ hcloud_network_subnet.public ]
 }
 
 # Firewall for Redis Cache
@@ -138,4 +141,5 @@ resource "hcloud_firewall" "redis_firewall" {
   apply_to {
     label_selector = "role=redis"
   }
+  depends_on = [ hcloud_network_subnet.public ]
 }

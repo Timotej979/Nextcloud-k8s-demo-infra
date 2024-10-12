@@ -20,13 +20,18 @@ variable "environment" {
   type        = string
 }
 
-variable "ssh_key_name" {
-  description = "Name of the SSH key to use for the servers"
-  type        = string
+variable "recreate_ssh_keys" {
+  description = "Recreate the SSH keys for the infrastructure, can be used to rotate the SSH keys (Valid values: 0 or 1)"
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.recreate_ssh_keys >= 0 && var.recreate_ssh_keys <= 1
+    error_message = "Valid values are 0 or 1."
+  }
 }
 
 variable "ssh_key_passphrase" {
-  description = "Passphrase for the SSH key"
+  description = "Passphrase for the SSH keys used in the infrastructure"
   type        = string
   sensitive   = true
 }
@@ -78,19 +83,19 @@ variable "num_worker_nodes" {
 }
 
 variable "server_image" {
-  description = "Server image for the Kubernetes nodes"
+  description = "Server image for the Kubernetes nodes, check the Hetzner Cloud API for available images"
   type        = string
   default     = "ubuntu-20.04"
 }
 
 variable "server_type" {
-  description = "Server type for the Kubernetes nodes"
+  description = "Server type for the Kubernetes nodes, check the Hetzner Cloud API for available types"
   type        = string
   default     = "cx22"
 }
 
 variable "server_location" {
-  description = "Server location for the Kubernetes nodes"
+  description = "Server location for the Kubernetes nodes, check the Hetzner Cloud API for available locations"
   type        = string
   default     = "nbg1"
 }

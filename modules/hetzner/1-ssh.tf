@@ -1,55 +1,84 @@
-# Local-exec provisioner to generate SSH key for the Cluster worker nodes
-resource "null_resource" "ssh_key_gen_cluster" {
-  provisioner "local-exec" {
-    command = "${path.module}/generate_ssh_key.sh nextcloud_hetzner_cluster_workers ${var.ssh_key_passphrase}"
-  }
+# Random passwords for SSH keys
+resource "random_password" "cluster_worker_ssh_key_password" {
+  length           = 32
+  special          = true
+  override_special = "_%@"
 }
 
-# Local-exec provisioner to generate SSH key for the Cluster control plane
-resource "null_resource" "ssh_key_gen_control_plane" {
-  provisioner "local-exec" {
-    command = "${path.module}/generate_ssh_key.sh nextcloud_hetzner_cluster_controls ${var.ssh_key_passphrase}"
-  }
+resource "random_password" "cluster_control_ssh_key_password" {
+  length           = 32
+  special          = true
+  override_special = "_%@"
 }
 
-# Local-exec provisioner to generate SSH key for the DB
-resource "null_resource" "ssh_key_gen_db" {
-  provisioner "local-exec" {
-    command = "${path.module}/generate_ssh_key.sh nextcloud_hetzner_db ${var.ssh_key_passphrase}"
-  }
+resource "random_password" "db_ssh_key_password" {
+  length           = 32
+  special          = true
+  override_special = "_%@"
 }
 
-# Local-exec provisioner to generate SSH key for the Redis
-resource "null_resource" "ssh_key_gen_redis" {
-  provisioner "local-exec" {
-    command = "${path.module}/generate_ssh_key.sh nextcloud_hetzner_redis ${var.ssh_key_passphrase}"
-  }
+resource "random_password" "redis_ssh_key_password" {
+  length           = 32
+  special          = true
+  override_special = "_%@"
+}
+
+# External data sources for SSH keys
+data "external" "cluster_worker_key" {
+  program   = ["bash",
+               "${path.module}/generate_ssh_key.sh", "nextcloud_demo_cluster_worker",
+                random_password.cluster_worker_ssh_key_password.result,
+                var.recreate_ssh_keys]
+}
+
+data "external" "cluster_control_key" {
+  program = ["bash",
+             "${path.module}/generate_ssh_key.sh",
+             "nextcloud_demo_cluster_control",
+             random_password.cluster_control_ssh_key_password.result,
+             var.recreate_ssh_keys]
+}
+
+data "external" "db_key" {
+  program = ["bash",
+             "${path.module}/generate_ssh_key.sh",
+             "nextcloud_demo_db",
+             random_password.db_ssh_key_password.result,
+             var.recreate_ssh_keys]
+}
+
+data "external" "redis_key" {
+  program = ["bash",
+             "${path.module}/generate_ssh_key.sh",
+             "nextcloud_demo_redis",
+             random_password.redis_ssh_key_password.result,
+             var.recreate_ssh_keys]
 }
 
 # Create an SSH key resource for the Cluster worker nodes
 resource "hcloud_ssh_key" "cluster_workers" {
   name       = "${var.environment}-${var.project}-cluster-workers"
-  public_key = file("${path.module}/nextcloud_hetzner_cluster_workers.pub")
-  depends_on = [ null_resource.ssh_key_gen_cluster ]
+  public_key = data.external.cluster_worker_key.result["public_key"]
+  depends_on = [ data.external.cluster_worker_key ]
 }
 
 # Create an SSH key resource for the Cluster control plane
 resource "hcloud_ssh_key" "cluster_controls" {
   name       = "${var.environment}-${var.project}-cluster-controls"
-  public_key = file("${path.module}/nextcloud_hetzner_cluster_controls.pub")
-  depends_on = [ null_resource.ssh_key_gen_control_plane ]
+  public_key = data.external.cluster_control_key.result["public_key"]
+  depends_on = [ data.external.cluster_control_key ]
 }
 
 # Create an SSH key resource for the DB
 resource "hcloud_ssh_key" "db" {
   name       = "${var.environment}-${var.project}-db"
-  public_key = file("${path.module}/nextcloud_hetzner_db.pub")
-  depends_on = [ null_resource.ssh_key_gen_db ]
+  public_key = data.external.db_key.result["public_key"]
+  depends_on = [ data.external.db_key ]
 }
 
 # Create an SSH key resource for the Redis
 resource "hcloud_ssh_key" "redis" {
   name       = "${var.environment}-${var.project}-redis"
-  public_key = file("${path.module}/nextcloud_hetzner_redis.pub")
-  depends_on = [ null_resource.ssh_key_gen_redis ]
+  public_key = data.external.redis_key.result["public_key"]
+  depends_on = [ data.external.redis_key ]
 }

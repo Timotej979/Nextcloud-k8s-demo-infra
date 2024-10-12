@@ -12,15 +12,15 @@ resource "hcloud_server" "control_plane" {
     # 10.0.1.11
     # 10.0.1.12
   network {
-    network_id = hcloud_subnet.public.id
-    ip         = "${cidrhost(var.public_subnet_cidr, count.index + 9)}"
+    network_id = hcloud_network.vpc.id
+    ip         = "${cidrhost(var.public_subnet_cidr, count.index + 10)}"
   }
   labels = {
     project     = var.project
     environment = var.environment
     role        = "control-plane"
   }
-  depends_on = [ hcloud_subnet.public, hcloud_ssh_key.cluster_controls ]
+  depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_controls ]
 }
 
 # Create worker nodes for the Kubernetes cluster
@@ -37,7 +37,7 @@ resource "hcloud_server" "worker" {
     # 10.0.1.21
     # 10.0.1.22
   network {
-    network_id = hcloud_subnet.public.id
+    network_id = hcloud_network.vpc.id
     ip         = "${cidrhost(var.public_subnet_cidr, count.index + 20)}"
   }
   labels = {
@@ -45,5 +45,5 @@ resource "hcloud_server" "worker" {
     environment = var.environment
     role        = "worker"
   }
-  depends_on = [ hcloud_subnet.public, hcloud_ssh_key.cluster_controls ]
+  depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_controls ]
 }
