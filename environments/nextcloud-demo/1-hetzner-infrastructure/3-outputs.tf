@@ -5,8 +5,8 @@ output "control_plane_ssh_key_name" {
 
 output "control_plane_ssh_key_password" {
   description = "Password for the SSH key for the control plane nodes"
-  value       = nonsensitive(module.hetzner_infrastructure.control_plane_ssh_key_password)
-  #sensitive   = true
+  value       = module.hetzner_infrastructure.control_plane_ssh_key_password
+  sensitive   = true
 }
 
 output "worker_ssh_key_name" {
@@ -16,8 +16,8 @@ output "worker_ssh_key_name" {
 
 output "worker_ssh_key_password" {
   description = "Password for the SSH key for the worker nodes"
-  value       = nonsensitive(module.hetzner_infrastructure.worker_ssh_key_password)
-  #sensitive   = true
+  value       = module.hetzner_infrastructure.worker_ssh_key_password
+  sensitive   = true
 }
 
 output "db_ssh_key_name" {
@@ -27,8 +27,8 @@ output "db_ssh_key_name" {
 
 output "db_ssh_key_password" {
   description = "Password for the SSH key for the database server"
-  value       = nonsensitive(module.hetzner_infrastructure.db_ssh_key_password)
-  #sensitive   = true
+  value       = module.hetzner_infrastructure.db_ssh_key_password
+  sensitive   = true
 }
 
 output "redis_ssh_key_name" {
@@ -38,8 +38,8 @@ output "redis_ssh_key_name" {
 
 output "redis_ssh_key_password" {
   description = "Password for the SSH key for the Redis server"
-  value       = nonsensitive(module.hetzner_infrastructure.redis_ssh_key_password)
-  #sensitive   = true
+  value       = module.hetzner_infrastructure.redis_ssh_key_password
+  sensitive   = true
 }
 
 output "control_plane_ips" {

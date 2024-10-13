@@ -1,0 +1,92 @@
+---
+- name: Install PostgreSQL
+  hosts: db_server
+  become: yes  # Use sudo
+  vars:
+    application_user: nextcloud
+    application_password: "{{ nextcloud_password }}"  # Password should be passed from Terraform
+    application_db: nextclouddb
+    cluster_datastore_user: cluster
+    cluster_datastore_password: "{{ cluster_password }}"  # Password should be passed from Terraform
+    cluster_datastore_db: clusterdb
+    postgresql_conf_path: /etc/postgresql/12/main/postgresql.conf  # Adjust version and path as necessary
+    pg_hba_conf_path: /etc/postgresql/12/main/pg_hba.conf  # Adjust version and path as necessary
+
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install PostgreSQL and dependencies
+      apt:
+        name: postgresql postgresql-contrib
+        state: present
+
+    - name: Ensure PostgreSQL service is running
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Create a cluster database
+      become_user: postgres
+      postgresql_db:
+        name: "{{ cluster_datastore_db }}"
+        owner: "{{ cluster_datastore_user }}"
+        state: present
+
+    - name: Create a cluster database user with limited privileges
+      become_user: postgres
+      postgresql_user:
+        name: "{{ cluster_datastore_user }}"
+        password: "{{ cluster_datastore_password }}"
+        priv: "{{ cluster_datastore_db }}.*:ALL"
+        role_attr_flags: ''
+        state: present
+
+    - name: Create an application database
+      become_user: postgres
+      postgresql_db:
+        name: "{{ application_db }}"
+        owner: "{{ application_user }}"
+        state: present
+
+    - name: Create an application database user with limited privileges
+      become_user: postgres
+      postgresql_user:
+        name: "{{ application_user }}"
+        password: "{{ application_password }}"
+        priv: "{{ application_db }}.*:ALL"
+        role_attr_flags: ''
+        state: present
+
+    - name: Ensure PostgreSQL listens on all interfaces
+      lineinfile:
+        path: "{{ postgresql_conf_path }}"
+        regexp: '^#?listen_addresses'
+        line: "listen_addresses = '*'"
+        state: present
+      notify:
+        - Restart PostgreSQL
+
+    - name: Allow connections from 10.0.1.0/24 subnet in pg_hba.conf using scram-sha-256
+      lineinfile:
+        path: "{{ pg_hba_conf_path }}"
+        line: "host    all             all             10.0.1.0/24            scram-sha-256"
+        state: present
+      notify:
+        - Restart PostgreSQL
+
+    - name: Deny remote connections for postgres user
+      lineinfile:
+        path: "{{ pg_hba_conf_path }}"
+        line: "host    all             postgres        0.0.0.0/0               reject"
+        state: present
+      notify:
+        - Restart PostgreSQL
+
+  handlers:
+    - name: Restart PostgreSQL
+      service:
+        name: postgresql
+        state: restarted

@@ -18,7 +18,7 @@ terraform {
   backend "s3" {
     profile        = "terraform"
     region         = "eu-central-1"
-    key            = "hetzner-infra.tfstate"
+    key            = "hetzner.tfstate"
     bucket         = "nextcloud-demo-tfstate"
     dynamodb_table = "nextcloud-demo-tfstate-lock"
     encrypt        = true

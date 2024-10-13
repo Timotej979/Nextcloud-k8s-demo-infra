@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket = "nextcloud-demo-tfstate"
      
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false # TODO: Set to true on production
   }
 
   tags = {
