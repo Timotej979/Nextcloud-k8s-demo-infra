@@ -8,12 +8,12 @@ variable "worker_ips" {
   type        = list(string)
 }
 
-variable "db_ip" {
+variable "db_internal_ip" {
   description = "Private IP for the database server"
   type        = string
 }
 
-variable "redis_ip" {
+variable "redis_internal_ip" {
   description = "Private IP for the Redis server"
   type        = string
 }
@@ -23,10 +23,9 @@ variable "control_plane_ssh_key_name" {
   type        = string
 }
 
-variable "control_plane_ssh_key_password" {
-  description = "Password for the SSH key for the control plane nodes"
+variable "control_plane_ssh_key_path" {
+  description = "Path to the SSH key for the control plane nodes"
   type        = string
-  sensitive   = true
 }
 
 variable "worker_ssh_key_name" {
@@ -34,10 +33,9 @@ variable "worker_ssh_key_name" {
   type        = string
 }
 
-variable "worker_ssh_key_password" {
-  description = "Password for the SSH key for the worker nodes"
+variable "worker_ssh_key_path" {
+  description = "Path to the SSH key for the worker nodes"
   type        = string
-  sensitive   = true
 }
 
 variable "db_ssh_key_name" {
@@ -45,10 +43,14 @@ variable "db_ssh_key_name" {
   type        = string
 }
 
-variable "db_ssh_key_password" {
-  description = "Password for the SSH key for the database server"
+variable "db_ssh_key_path" {
+  description = "Path to the SSH key for the database server"
   type        = string
-  sensitive   = true
+}
+
+variable "db_root_password" {
+  description = "Root password for the database server"
+  type        = string
 }
 
 variable "redis_ssh_key_name" {
@@ -56,8 +58,12 @@ variable "redis_ssh_key_name" {
   type        = string
 }
 
-variable "redis_ssh_key_password" {
-  description = "Password for the SSH key for the Redis server"
+variable "redis_ssh_key_path" {
+  description = "Path to the SSH key for the Redis server"
   type        = string
-  sensitive   = true
+}
+
+variable "redis_root_password" {
+  description = "Root password for the Redis server"
+  type        = string
 }

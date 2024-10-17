@@ -9,7 +9,6 @@ show_help() {
     echo
     echo "Arguments:" >&2
     echo "  key_name       Name of the key to be generated" >&2
-    echo "  passphrase     Passphrase for the generated key" >&2
     echo "  recreate_flag  0 to use existing keys, 1 to force recreation of SSH keys" >&2
     echo
     echo "Output:" >&2
@@ -38,15 +37,14 @@ fi
 
 # Check if at least two arguments are provided
 if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 <key_name> <passphrase> <recreate_flag>" >&2
+    echo "Usage: $0 <key_name> <recreate_flag>" >&2
     exit 1
 fi
 
 KEY_NAME="$1"
 KEY_PATH="$HOME/.ssh/$KEY_NAME"
 KEY_PUB_PATH="$KEY_PATH.pub"
-PASSPHRASE="$2"
-RECREATE="$3"
+RECREATE="$2"
 
 # Check if the recreate_flag is valid
 if [[ "$RECREATE" != 1 && "$RECREATE" != 0 ]]; then
@@ -83,7 +81,7 @@ else
 
     # Generate SSH key with a passphrase
     echo "Generating SSH key at $KEY_PATH" >&2
-    ssh-keygen -t ed25519 -f "$KEY_PATH" -N "$PASSPHRASE" -q
+    ssh-keygen -t ed25519 -f "$KEY_PATH" -N "" -q
 
     # Check if key generation was successful
     if [ $? -ne 0 ]; then

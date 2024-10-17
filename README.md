@@ -2,7 +2,16 @@
 
 A demo infrastructure for NextCloud running on a self-managed/instal;ed k3s cluster on Hetzner cx22 instances.
 
-TODO: Add infrastructure description once done
+TODO: Add infrastructure description/documentation once done
+
+# Prerequisites
+
+- Install OpenSSH   (For Ansible)
+- Install SSHPass   (For Ansible SSH session passing)
+- Install Ansible   (Automation)
+- Install Terraform (IaC)
+
+!! WARNING: Some modules modify the SSH keys directly in the ~/.ssh/* directory and recreate the SSH config file. Please back up any configurations you might have and make sure the SSH key naming conventions do not conflict !!
 
 ## Automatic documentation generation
 
