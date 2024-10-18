@@ -1,45 +1,7 @@
-# Control plane SSH credentials
-output "control_plane_ssh_key_name" {
-  description = "Name of the SSH key for the control plane nodes"
-  value       = hcloud_ssh_key.cluster_controls.name
-}
-
-output "control_plane_ssh_key_path" {
-  description = "Path to the SSH key for the control plane nodes"
-  value       = "~/.ssh/nextcloud_demo_cluster_control"
-}
-
-# Worker SSH credentials
-output "worker_ssh_key_name" {
-  description = "Name of the SSH key for the worker nodes"
-  value       = hcloud_ssh_key.cluster_workers.name
-}
-
-output "worker_ssh_key_path" {
-  description = "Path to the SSH key for the worker nodes"
-  value       = "~/.ssh/nextcloud_demo_cluster_worker"
-}
-
-# Database SSH credentials
-output "db_ssh_key_name" {
-  description = "Name of the SSH key for the database server"
-  value       = hcloud_ssh_key.db.name
-}
-
-output "db_ssh_key_path" {
-  description = "Path to the SSH key for the database server"
-  value       = "~/.ssh/nextcloud_demo_db"
-}
-
-# Redis SSH credentials
-output "redis_ssh_key_name" {
-  description = "Name of the SSH key for the Redis server"
-  value       = hcloud_ssh_key.redis.name
-}
-
-output "redis_ssh_key_path" {
-  description = "Path to the SSH key for the Redis server"
-  value       = "~/.ssh/nextcloud_demo_redis"
+# Public subnet CIDR
+output "public_subnet_cidr" {
+  description = "CIDR block for the public subnet"
+  value       = var.public_subnet_cidr
 }
 
 # Control plan IPs
@@ -88,14 +50,60 @@ output "redis_internal_ip" {
 #  value       = random_password.worker_pass.result
 #}
 
-# Database root password
-output "db_root_password" {
+# Database server root password
+output "db_server_root_password" {
   description = "Root password for the database server"
   value       = random_password.db_pass.result
 }
 
-# Redis root password
-output "redis_root_password" {
+# Redis root server password
+output "redis_server_root_password" {
   description = "Root password for the Redis server"
   value       = random_password.redis_pass.result
+}
+
+########################################################################
+
+# Control plane SSH credentials
+output "control_plane_ssh_key_name" {
+  description = "Name of the SSH key for the control plane nodes"
+  value       = hcloud_ssh_key.cluster_controls.name
+}
+
+output "control_plane_ssh_key_path" {
+  description = "Path to the SSH key for the control plane nodes"
+  value       = "~/.ssh/nextcloud_demo_cluster_control"
+}
+
+# Worker SSH credentials
+output "worker_ssh_key_name" {
+  description = "Name of the SSH key for the worker nodes"
+  value       = hcloud_ssh_key.cluster_workers.name
+}
+
+output "worker_ssh_key_path" {
+  description = "Path to the SSH key for the worker nodes"
+  value       = "~/.ssh/nextcloud_demo_cluster_worker"
+}
+
+# Database SSH credentials
+output "db_ssh_key_name" {
+  description = "Name of the SSH key for the database server"
+  value       = hcloud_ssh_key.db.name
+}
+
+output "db_ssh_key_path" {
+  description = "Path to the SSH key for the database server"
+  value       = "~/.ssh/nextcloud_demo_db"
+}
+
+# Redis SSH credentials
+output "redis_ssh_key_name" {
+  description = "Name of the SSH key for the Redis server"
+  value       = hcloud_ssh_key.redis.name
+}
+
+output "redis_ssh_key_path" {
+  description = "Path to the SSH key for the Redis server"
+  value       = "~/.ssh/nextcloud_demo_redis"
 }

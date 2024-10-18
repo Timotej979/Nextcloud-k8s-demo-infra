@@ -1,5 +1,5 @@
 # Create root password for the database
-resource "random_password" "db_root_password" {
+resource "random_password" "db_admin_password" {
   length           = 32
   special          = false
 }
@@ -16,27 +16,24 @@ resource "random_password" "db_application_user_password" {
   special          = false
 }
 
-# This file is responsible for installing PostgreSQL on the target host
-resource "ansible_playbook" "postgres" {
-  playbook   = "${path.module}/playbooks/install_postgre.yml"
-  name       = var.db_internal_ip
-  replayable = true
-
-  extra_vars = {
-    root_user_password   = random_password.db_root_password.result
-    nextcloud_password   = random_password.db_application_user_password.result
-    cluster_password     = random_password.db_cluster_user_password.result
-  }
+resource "local_sensitive_file" "install_postgre" {
+  filename = "${path.module}/playbooks/install_postgre.yml"
+  content = templatefile("${path.module}/templates/install_postgre.tpl", {
+    public_subnet_cidr  = var.public_subnet_cidr
+    admin_user_password = random_password.db_admin_password.result
+    nextcloud_password  = random_password.db_application_user_password.result
+    cluster_password    = random_password.db_cluster_user_password.result
+  })
 }
 
 # Execute the playbook
-resource "null_resource" "execute_playbook" {
+resource "null_resource" "execute_postgre_playbook" {
   triggers = {
-    playbook_id = ansible_playbook.postgres.id
+    playbook_id = local_sensitive_file.install_postgre.content
   }
 
   provisioner "local-exec" {
     command = "ansible-playbook -i ${path.module}/inventory/inventory.ini ${path.module}/playbooks/install_postgre.yml"
   }
-  depends_on = [ ansible_playbook.postgres , local_file.control_plane_inventory , local_file.ssh_config ]
+  depends_on = [ local_sensitive_file.ansible_inventory, local_sensitive_file.install_postgre, local_sensitive_file.generate_ssh_config ]
 }

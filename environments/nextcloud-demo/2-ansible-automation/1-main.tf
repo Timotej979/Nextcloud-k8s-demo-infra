@@ -2,10 +2,11 @@ module "ansible_automation" {
   source = "../../../modules/ansible"
 
   # Ansible variables
-  control_plane_ips = data.terraform_remote_state.hetzner_infrastructure.outputs.control_plane_ips
-  worker_ips        = data.terraform_remote_state.hetzner_infrastructure.outputs.worker_ips
-  db_internal_ip             = data.terraform_remote_state.hetzner_infrastructure.outputs.db_internal_ip
-  redis_internal_ip          = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_internal_ip
+  public_subnet_cidr = data.terraform_remote_state.hetzner_infrastructure.outputs.public_subnet_cidr
+  control_plane_ips  = data.terraform_remote_state.hetzner_infrastructure.outputs.control_plane_ips
+  worker_ips         = data.terraform_remote_state.hetzner_infrastructure.outputs.worker_ips
+  db_internal_ip     = data.terraform_remote_state.hetzner_infrastructure.outputs.db_internal_ip
+  redis_internal_ip  = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_internal_ip
 
   # SSH key variables
   # Control plane
@@ -17,9 +18,9 @@ module "ansible_automation" {
   # Database
   db_ssh_key_name              = data.terraform_remote_state.hetzner_infrastructure.outputs.db_ssh_key_name
   db_ssh_key_path              = data.terraform_remote_state.hetzner_infrastructure.outputs.db_ssh_key_path
-  db_root_password             = data.terraform_remote_state.hetzner_infrastructure.outputs.db_root_password
+  db_server_root_password             = data.terraform_remote_state.hetzner_infrastructure.outputs.db_server_root_password
   # Redis
   redis_ssh_key_name           = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_ssh_key_name
   redis_ssh_key_path           = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_ssh_key_path
-  redis_root_password          = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_root_password
+  redis_server_root_password          = data.terraform_remote_state.hetzner_infrastructure.outputs.redis_server_root_password
 }

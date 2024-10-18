@@ -3,21 +3,25 @@
   hosts: db_server
   become: yes  # Use sudo
   vars:
+    public_subnet_cidr: ${public_subnet_cidr}
     postgresql_version: 14
-    root_password: "{{ root_user_password }}"  # Password should be passed from Terraform
+    admin_password: ${admin_user_password}
     application_user: nextcloud
-    application_password: "{{ nextcloud_password }}"  # Password should be passed from Terraform
-    application_db: nextclouddb
+    application_password: ${nextcloud_password}
+    application_db: nextcloud
     cluster_datastore_user: cluster
-    cluster_datastore_password: "{{ cluster_password }}"  # Password should be passed from Terraform
-    cluster_datastore_db: clusterdb
+    cluster_datastore_password: ${cluster_password}
+    cluster_datastore_db: cluster
   tasks:
-    - name: Debug root_password
-      debug:
-        var: root_password
-
     - name: Update apt cache
       apt: update_cache=yes
+      
+    - name: Install required Python packages
+      apt:
+        name:
+          - python3-psycopg2
+          - python3-pip
+        state: present
 
     - name: Add the PostgreSQL APT key
       apt_key:
@@ -49,18 +53,15 @@
       blockinfile:
         dest: /etc/postgresql/14/main/pg_hba.conf
         block: |
-          host    all             all             10.0.1.0/24                scram-sha-256
-          host    all             all             0.0.0.0/0                  reject      
+          host    all             all             ${public_subnet_cidr}                scram-sha-256    
       notify: Restart Postgresql
-    
-    - name: Set password for the default PostgreSQL user
-      shell: 'psql -c "ALTER USER postgres WITH PASSWORD {{ root_password }};"'
 
-    - name: Create a cluster database
+    - name: Change default postgres user password
       become_user: postgres
-      postgresql_db:
-        name: "{{ cluster_datastore_db }}"
-        owner: "{{ cluster_datastore_user }}"
+      postgresql_user:
+        name: postgres
+        password: "{{ admin_password }}"  # Admin password provided in vars
+        role_attr_flags: 'SUPERUSER'  # Ensure that the 'postgres' user retains superuser rights
         state: present
 
     - name: Create a cluster database user with limited privileges
@@ -68,9 +69,23 @@
       postgresql_user:
         name: "{{ cluster_datastore_user }}"
         password: "{{ cluster_datastore_password }}"
-        priv: "{{ cluster_datastore_db }}.*:ALL"
         role_attr_flags: ''
         state: present
+      
+    - name: Create a cluster database
+      become_user: postgres
+      postgresql_db:
+        name: "{{ cluster_datastore_db }}"
+        owner: "{{ cluster_datastore_user }}"
+        state: present
+
+    - name: Create an application database user with limited privileges
+      become_user: postgres
+      postgresql_user:
+        name: "{{ application_user }}"
+        password: "{{ application_password }}"
+        role_attr_flags: ''
+        state: present    
 
     - name: Create an application database
       become_user: postgres
@@ -79,14 +94,13 @@
         owner: "{{ application_user }}"
         state: present
 
-    - name: Create an application database user with limited privileges
-      become_user: postgres
-      postgresql_user:
-        name: "{{ application_user }}"
-        password: "{{ application_password }}"
-        priv: "{{ application_db }}.*:ALL"
-        role_attr_flags: ''
-        state: present
+    - name: Ensure the firewall allows traffic on port 5432 from public subnet
+      ufw:
+        rule: allow
+        from_ip: '{{ public_subnet_cidr }}'
+        to_port: 5432
+        proto: tcp
+      when: ansible_os_family == 'Debian'
 
   handlers:
     - name: Restart Postgresql

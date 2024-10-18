@@ -1,7 +1,0 @@
----
-datastore_endpoint: >
-  {% if groups['control_plane'] | length > 1 %}
-    --datastore-endpoint=postgres://nextcloud_user:{{ cluster_datastore_password }}@{{ db_ip }}:5432/nextcloud
-  {% else %}
-    ""
-  {% endif %}
