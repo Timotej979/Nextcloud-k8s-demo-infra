@@ -1,37 +1,15 @@
-# Random passwords for SSH keys
-resource "random_password" "cluster_worker_ssh_key_password" {
-  length           = 32
-  special          = false
-}
-
-resource "random_password" "cluster_control_ssh_key_password" {
-  length           = 32
-  special          = false
-}
-
-resource "random_password" "db_ssh_key_password" {
-  length           = 32
-  special          = false
-}
-
-resource "random_password" "redis_ssh_key_password" {
-  length           = 32
-  special          = false
-}
-
 # External data sources for SSH keys
 data "external" "cluster_worker_key" {
   program   = ["bash",
-               "${path.module}/generate_ssh_key.sh", "nextcloud_demo_cluster_worker",
-                random_password.cluster_worker_ssh_key_password.result,
-                var.recreate_ssh_keys]
+               "${path.module}/generate_ssh_key.sh", 
+               "nextcloud_demo_cluster_worker",
+               var.recreate_ssh_keys]
 }
 
 data "external" "cluster_control_key" {
   program = ["bash",
              "${path.module}/generate_ssh_key.sh",
              "nextcloud_demo_cluster_control",
-             random_password.cluster_control_ssh_key_password.result,
              var.recreate_ssh_keys]
 }
 
@@ -39,7 +17,6 @@ data "external" "db_key" {
   program = ["bash",
              "${path.module}/generate_ssh_key.sh",
              "nextcloud_demo_db",
-             random_password.db_ssh_key_password.result,
              var.recreate_ssh_keys]
 }
 
@@ -47,7 +24,6 @@ data "external" "redis_key" {
   program = ["bash",
              "${path.module}/generate_ssh_key.sh",
              "nextcloud_demo_redis",
-             random_password.redis_ssh_key_password.result,
              var.recreate_ssh_keys]
 }
 

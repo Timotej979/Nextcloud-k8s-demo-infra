@@ -21,6 +21,13 @@ resource "hcloud_firewall" "control_plane_firewall" {
     port       = "6443"
     source_ips = ["0.0.0.0/0", "::/0"]
   }
+  # Allow communication to the Kubelet API (port 6444)
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "6444"
+    source_ips = [var.public_subnet_cidr] # or appropriate CIDR
+  }
   # Allow communication between control plane nodes (etcd, kubelet, etcd)
   rule {
     direction  = "in"
@@ -39,6 +46,13 @@ resource "hcloud_firewall" "control_plane_firewall" {
     protocol   = "tcp"
     port       = "10255"
     source_ips = [var.public_subnet_cidr] # Worker and control plane subnet
+  }
+  # Allow Flannel VXLAN traffic (UDP port 8472)
+  rule {
+    direction  = "in"
+    protocol   = "udp"
+    port       = "8472"
+    source_ips = [var.public_subnet_cidr]  # Allow from the private subnet
   }
   # Apply firewall to control plane nodes
   apply_to {
@@ -63,6 +77,13 @@ resource "hcloud_firewall" "worker_firewall" {
     port       = "22"
     source_ips = ["0.0.0.0/0", "::/0"]
   }
+  # Allow communication to the Kubelet API (port 6444)
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "6444"
+    source_ips = [var.public_subnet_cidr] # or appropriate CIDR
+  }
   # Allow communication between workers and control plane nodes on port 10250 (kubelet)
   rule {
     direction  = "in"
@@ -76,6 +97,13 @@ resource "hcloud_firewall" "worker_firewall" {
     protocol   = "tcp"
     port       = "10255"
     source_ips = [var.public_subnet_cidr] # Control plane and worker communication
+  }
+  # Allow Flannel VXLAN traffic (UDP port 8472)
+  rule {
+    direction  = "in"
+    protocol   = "udp"
+    port       = "8472"
+    source_ips = [var.public_subnet_cidr]  # Allow from the private subnet
   }
   # Apply firewall to worker nodes
   apply_to {

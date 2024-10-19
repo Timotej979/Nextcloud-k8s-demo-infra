@@ -65,8 +65,8 @@ variable "num_control_plane_nodes" {
   type        = number
   default     = 1
   validation {
-    condition     = var.num_control_plane_nodes <= 3
-    error_message = "The maximum number of control plane nodes is 3 for stable control sepcified by the Kubernetes project."
+    condition     = var.num_control_plane_nodes <= 1
+    error_message = "The maximum number of control plane nodes is 1, since we are not using etcd for contol plane HA."
   }
 }
 
