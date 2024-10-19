@@ -4,6 +4,7 @@ Host control_plane
   HostName ${control_plane_ip}
   IdentityFile ${control_plane_ssh_key_path}
   ForwardAgent yes
+  StrictHostKeyChecking no
 %{ endfor }
 
 %{ for worker_ip in worker_ips }

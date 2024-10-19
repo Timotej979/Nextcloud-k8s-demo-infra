@@ -31,6 +31,7 @@ resource "hcloud_server" "control_plane" {
   user_data = <<-EOF
               #cloud-config
               password: ${random_password.control_plane_root_password.result}
+              ssh_pwauth: false
               chpasswd:
                 expire: False
               EOF
@@ -50,7 +51,7 @@ resource "hcloud_server" "worker" {
   image       = var.server_image
   server_type = var.server_type
   location    = var.server_location
-  ssh_keys    = [ hcloud_ssh_key.cluster_controls.id ]
+  ssh_keys    = [ hcloud_ssh_key.cluster_workers.id ]
   # Assign the server to the public subnet
   # Worker nodes have IP addresses as follows:
     # 10.0.1.20
@@ -64,6 +65,7 @@ resource "hcloud_server" "worker" {
   user_data = <<-EOF
               #cloud-config
               password: ${random_password.workers_root_password.result}
+              ssh_pwauth: false
               chpasswd:
                 expire: False
               EOF
@@ -73,5 +75,5 @@ resource "hcloud_server" "worker" {
     environment = var.environment
     role        = "worker"
   }
-  depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_controls ]
+  depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_workers ]
 }

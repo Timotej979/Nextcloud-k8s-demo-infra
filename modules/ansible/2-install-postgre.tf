@@ -4,12 +4,6 @@ resource "random_password" "db_admin_password" {
   special          = false
 }
 
-# Create the password for cluster user access
-resource "random_password" "db_cluster_user_password" {
-  length           = 32
-  special          = false
-}
-
 # Create a password for application user access
 resource "random_password" "db_application_user_password" {
   length           = 32
@@ -22,7 +16,6 @@ resource "local_sensitive_file" "install_postgre" {
     public_subnet_cidr  = var.public_subnet_cidr
     admin_user_password = random_password.db_admin_password.result
     nextcloud_password  = random_password.db_application_user_password.result
-    cluster_password    = random_password.db_cluster_user_password.result
   })
 }
 

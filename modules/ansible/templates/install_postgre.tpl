@@ -9,9 +9,6 @@
     application_user: nextcloud
     application_password: ${nextcloud_password}
     application_db: nextcloud
-    cluster_datastore_user: cluster
-    cluster_datastore_password: ${cluster_password}
-    cluster_datastore_db: cluster
   tasks:
     - name: Update apt cache
       apt: update_cache=yes
@@ -62,21 +59,6 @@
         name: postgres
         password: "{{ admin_password }}"  # Admin password provided in vars
         role_attr_flags: 'SUPERUSER'  # Ensure that the 'postgres' user retains superuser rights
-        state: present
-
-    - name: Create a cluster database user with limited privileges
-      become_user: postgres
-      postgresql_user:
-        name: "{{ cluster_datastore_user }}"
-        password: "{{ cluster_datastore_password }}"
-        role_attr_flags: ''
-        state: present
-      
-    - name: Create a cluster database
-      become_user: postgres
-      postgresql_db:
-        name: "{{ cluster_datastore_db }}"
-        owner: "{{ cluster_datastore_user }}"
         state: present
 
     - name: Create an application database user with limited privileges

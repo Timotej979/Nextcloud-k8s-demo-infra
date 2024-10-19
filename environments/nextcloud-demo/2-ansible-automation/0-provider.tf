@@ -19,10 +19,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.70.0"
     }
-    ansible = {
-      version = "~> 1.3.0"
-      source  = "ansible/ansible"
-    }
   }
 
   backend "s3" {
