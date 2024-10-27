@@ -2,9 +2,9 @@
 
 
 <div align="center">
-  <img src="./docs/assets/hetzner.png" width="100">
+  <img src="./docs/assets/hetzner.png" width="200">
   <img src="./docs/assets/k3s.png" width="=10">
-  <img src="./docs/assets/ansible.png" width="100">
+  <img src="./docs/assets/ansible.png" width="200">
 </div>
 
 ---
@@ -74,5 +74,5 @@ The infrastructure of the demo is composed of the following components:
   - 1x helm chart for Nextcloud
 
 <div align="center">
-  <img src="./docs/assets/arch.png" width="1000">
+  <img src="./docs/assets/arch.png" width="1300">
 </div>
