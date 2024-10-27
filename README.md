@@ -2,9 +2,9 @@
 
 
 <div align="center">
-  <img src="./docs/assets/hetzner.png" style="border-radius: 50%; width: 100px; height: auto;">
-  <img src="./docs/assets/k3s.png" style="border-radius: 50%; width: 100px; height: auto;">
-  <img src="./docs/assets/ansible.png" style="border-radius: 50%; width: 100px; height: auto;">
+  <img src="./docs/assets/hetzner.png" width="100">
+  <img src="./docs/assets/k3s.png" width="100">
+  <img src="./docs/assets/ansible.png" width="100">
 </div>
 
 ---
