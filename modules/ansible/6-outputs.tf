@@ -9,3 +9,7 @@ output "postgresql_password" {
 output "redis_password" {
   value = random_password.redis_application_user_password.result
 }
+
+output "cluster_cidr" {
+  value = var.cluster_cidr
+}

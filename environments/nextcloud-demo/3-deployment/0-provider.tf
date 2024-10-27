@@ -29,12 +29,16 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.70.0"
     }
+    hcloud = {
+      source = "hetznercloud/hcloud"
+      version = "~> 1.45"
+    }
   }
 
   backend "s3" {
     profile        = "terraform"
     region         = "eu-central-1"
-    key            = "k3s.tfstate"
+    key            = "deployment.tfstate"
     bucket         = "nextcloud-demo-tfstate"
     dynamodb_table = "nextcloud-demo-tfstate-lock"
     encrypt        = true

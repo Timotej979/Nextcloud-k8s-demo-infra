@@ -60,20 +60,14 @@ variable "private_redis_subnet_cidr" {
   description = "CIDR range for the private Redis subnet"
 }
 
-variable "num_control_plane_nodes" {
-  description = "Number of control plane nodes for the Kubernetes cluster"
-  type        = number
-  default     = 1
-  validation {
-    condition     = var.num_control_plane_nodes <= 1
-    error_message = "The maximum number of control plane nodes is 1, since we are not using etcd for contol plane HA."
-  }
-}
-
 variable "num_worker_nodes" {
   description = "Number of worker nodes for the Kubernetes cluster"
   type        = number
   default     = 2
+  validation {
+    condition     = var.num_worker_nodes > 0
+    error_message = "Number of worker nodes must be greater than 0."
+  }
 }
 
 variable "server_image" {

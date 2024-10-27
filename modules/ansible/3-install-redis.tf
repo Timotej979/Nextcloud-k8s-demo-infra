@@ -16,7 +16,7 @@ resource "local_sensitive_file" "install_redis" {
 # Execute the playbook
 resource "null_resource" "execute_redis_playbook" {
   triggers = {
-    playbook_id = local_sensitive_file.install_redis.content
+    always_run = "${timestamp()}"
   }
 
   provisioner "local-exec" {

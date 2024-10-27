@@ -1,11 +1,9 @@
-%{ for control_plane_ip in control_plane_ips }
 Host control_plane
   User root
   HostName ${control_plane_ip}
   IdentityFile ${control_plane_ssh_key_path}
   ForwardAgent yes
   StrictHostKeyChecking no
-%{ endfor }
 
 %{ for worker_ip in worker_ips }
 Host workers

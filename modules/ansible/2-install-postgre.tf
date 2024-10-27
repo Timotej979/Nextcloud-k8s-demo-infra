@@ -22,7 +22,7 @@ resource "local_sensitive_file" "install_postgre" {
 # Execute the playbook
 resource "null_resource" "execute_postgre_playbook" {
   triggers = {
-    playbook_id = local_sensitive_file.install_postgre.content
+    always_run = "${timestamp()}"
   }
 
   provisioner "local-exec" {

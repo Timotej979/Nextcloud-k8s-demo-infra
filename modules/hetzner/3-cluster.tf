@@ -12,8 +12,7 @@ resource "random_password" "workers_root_password" {
 
 # Create control plane nodes for the Kubernetes cluster
 resource "hcloud_server" "control_plane" {
-  count       = var.num_control_plane_nodes
-  name        = "${var.environment}-${var.project}-control-plane-${count.index}"
+  name        = "${var.environment}-${var.project}-control-plane"
   image       = var.server_image
   server_type = var.server_type
   location    = var.server_location
@@ -25,7 +24,7 @@ resource "hcloud_server" "control_plane" {
     # 10.0.1.12
   network {
     network_id = hcloud_network.vpc.id
-    ip         = "${cidrhost(var.public_subnet_cidr, count.index + 10)}"
+    ip         = "${cidrhost(var.public_subnet_cidr, 10)}"
   }
   # Cloud init user data to reset the root password
   user_data = <<-EOF
@@ -40,6 +39,7 @@ resource "hcloud_server" "control_plane" {
     project     = var.project
     environment = var.environment
     role        = "control-plane"
+    location    = var.server_location
   }
   depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_controls ]
 }
@@ -74,6 +74,7 @@ resource "hcloud_server" "worker" {
     project     = var.project
     environment = var.environment
     role        = "worker"
+    location    = var.server_location
   }
   depends_on = [ hcloud_network_subnet.public, hcloud_ssh_key.cluster_workers ]
 }
