@@ -11,7 +11,7 @@
 
 A demo infrastructure for NextCloud running on a self-managed/instaled k3s cluster on Hetzner cx22 instances. Using a sepparate Redis cache and Postgre DB in a seggregated private subnets connected to the main public VPC with the k3s cluster. 
 
-Access to the servers is only allowed with private/public key-pair SSH keys and is automaticaly configured using your existing *~/.ssh/\** and *~/.kube/\** directories (Read the warningsprerequisites bellow).
+Access to the servers is only allowed with private/public key-pair SSH keys and is automaticaly configured using your existing *~/.ssh/\** and *~/.kube/\** directories (Read the warning prerequisites bellow).
 
 Deployment of nextcloud is done using helm and kubernetes manifests with cert-manager and nginx to ensure TLS/SSL encryption.
 
@@ -57,7 +57,16 @@ git clone https://github.com/Timotej979/Nextcloud-k8s-demo-infra.git
 cd Nextcloud-k8s-demo-infra/environments/nextcloud-demo/
 ```
 
-3. Execute the environment segments in order:
+3. Setup the Hetzner API token and AWS credentials:
+```bash
+export AWS_ACCESS_KEY_ID="your_aws_access_key_id"
+export AWS_SECRET_ACCESS_KEY="your_aws_secret_access_key"
+
+touch ./1-hetzner-infrastructure/terraform.tfvars
+echo "hcloud_token = \"your_hetzner_api_token\"" > ./1-hetzner-infrastructure/terraform.tfvars
+```
+
+4. Execute the environment segments in order:
 ```bash
 # Terraform state bucket and DynamoDB table
 cd 0-tfstate/
@@ -175,7 +184,7 @@ The architecture of the demo infrastructure is shown in the following diagram:
 </div>
 
 Two details which is worth mentioning are:
-- The Postgre Db and Redis cache installation is done through Ansible using a bastion host (control plane) to connect to the private subnets since they are not directly accessible from the public subnet
+- The Postgre DB and Redis cache installation are done through Ansible using a bastion host (control plane) to connect to the private subnets since they are not directly accessible from the public subnet
 - The Hetzner load balancer is connected to the K3S worker nodes through annotations in the Nginx Ingress Controller helm chart
 
 ---
