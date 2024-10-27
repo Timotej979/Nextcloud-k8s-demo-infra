@@ -3,7 +3,7 @@
 
 <div align="center">
   <img src="./docs/assets/hetzner.png" width="100">
-  <img src="./docs/assets/k3s.png" width="300">
+  <img src="./docs/assets/k3s.png" width="=250">
   <img src="./docs/assets/ansible.png" width="100">
 </div>
 
@@ -35,3 +35,42 @@ done
 
 ## Infrastructure architecture
 
+The infrastructure of the demo is composed of the following components:
+
+- AWS resources (Phyical resources):
+  - 1x S3 bucket for the Terraform state
+  - 1x DynamoDB table for the Terraform state locking
+
+- Hetzner servers (Phyical resources):
+  - 1x cx22 instance for K3S control plane
+  - 2x cx22 instances for K3S worker nodes (Can be scaled up or down)
+  - 1x cx22 instance for Postgre DB
+  - 1x cx22 instance for Redis cache
+
+- Hetzner network (Phyical resources):
+  - 1x VPC for the whole infrastructure
+  - 1x public subnet for the K3S cluster
+  - 1x private subnet for the Postgre DB
+  - 1x private subnet for the Redis cache
+
+- Hetzner firewall (Phyical resources):
+  - 1x firewall for the K3S control plane
+  - 2x firewall for the K3S worker nodes (Can be scaled up or down)
+  - 1x firewall for the Postgre DB
+  - 1x firewall for the Redis cache
+
+- Hetzner load balancer (Phyical resources):
+  - 1x load balancer for the K3S cluster connected to the K3S worker nodes
+
+- Ansible:
+  - 1x ansible playbook for the K3S cluster
+  - 1x ansible playbook for the Postgre DB
+  - 1x ansible playbook for the Redis cache
+
+- Deployment:
+  - 1x helm chart for Cloud Controller Manager
+  - 1x helm chart for Cert Manager
+  - 1x helm chart for Nginx Ingress Controller (Connected to the Hetzner load balancer through annotations)
+  - 1x helm chart for Nextcloud
+
+[<img src="./docs/assets/arch.png" width="500" />](./docs/assets/arch.png)
