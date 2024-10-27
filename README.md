@@ -2,9 +2,9 @@
 
 
 <div align="center">
-  <img src="./docs/assets/hetzner.png" style="50%; width: 100px; height: auto;">
-  <img src="./docs/assets/k3s.png" style="50%; width: 200px; height: auto;">
-  <img src="./docs/assets/ansible.png" style="=width: 100px; height: auto;">
+  <img src="./docs/assets/hetzner.png" style="height: 100px; width: auto;">
+  <img src="./docs/assets/k3s.png" style="height: 100px; width: auto;">
+  <img src="./docs/assets/ansible.png" style="height: 100px; width: auto;">
 </div>
 
 ---
