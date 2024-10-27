@@ -35,13 +35,15 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_control_plane_ips"></a> [control\_plane\_ips](#input\_control\_plane\_ips) | List of public IPs for control plane nodes | `list(string)` | n/a | yes |
+| <a name="input_cluster_cidr"></a> [cluster\_cidr](#input\_cluster\_cidr) | The CIDR block for the Kubernetes cluster | `string` | n/a | yes |
+| <a name="input_control_plane_ip"></a> [control\_plane\_ip](#input\_control\_plane\_ip) | Control plane node IP | `string` | n/a | yes |
 | <a name="input_control_plane_ssh_key_name"></a> [control\_plane\_ssh\_key\_name](#input\_control\_plane\_ssh\_key\_name) | Name of the SSH key for the control plane nodes | `string` | n/a | yes |
 | <a name="input_control_plane_ssh_key_path"></a> [control\_plane\_ssh\_key\_path](#input\_control\_plane\_ssh\_key\_path) | Path to the SSH key for the control plane nodes | `string` | n/a | yes |
 | <a name="input_db_internal_ip"></a> [db\_internal\_ip](#input\_db\_internal\_ip) | Private IP for the database server | `string` | n/a | yes |
 | <a name="input_db_server_root_password"></a> [db\_server\_root\_password](#input\_db\_server\_root\_password) | Root password for the database server | `string` | n/a | yes |
 | <a name="input_db_ssh_key_name"></a> [db\_ssh\_key\_name](#input\_db\_ssh\_key\_name) | Name of the SSH key for the database server | `string` | n/a | yes |
 | <a name="input_db_ssh_key_path"></a> [db\_ssh\_key\_path](#input\_db\_ssh\_key\_path) | Path to the SSH key for the database server | `string` | n/a | yes |
+| <a name="input_k3s_version"></a> [k3s\_version](#input\_k3s\_version) | k3s version | `string` | n/a | yes |
 | <a name="input_public_subnet_cidr"></a> [public\_subnet\_cidr](#input\_public\_subnet\_cidr) | CIDR block for the public subnet | `string` | n/a | yes |
 | <a name="input_redis_internal_ip"></a> [redis\_internal\_ip](#input\_redis\_internal\_ip) | Private IP for the Redis server | `string` | n/a | yes |
 | <a name="input_redis_server_root_password"></a> [redis\_server\_root\_password](#input\_redis\_server\_root\_password) | Root password for the Redis server | `string` | n/a | yes |
@@ -55,4 +57,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cluster_cidr"></a> [cluster\_cidr](#output\_cluster\_cidr) | n/a |
 | <a name="output_kubeconfig_path"></a> [kubeconfig\_path](#output\_kubeconfig\_path) | n/a |
+| <a name="output_postgresql_password"></a> [postgresql\_password](#output\_postgresql\_password) | n/a |
+| <a name="output_redis_password"></a> [redis\_password](#output\_redis\_password) | n/a |
