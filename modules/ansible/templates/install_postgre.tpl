@@ -10,8 +10,16 @@
     application_password: ${nextcloud_password}
     application_db: nextcloud
   tasks:
-    - name: Update apt cache
-      apt: update_cache=yes
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages on servers
+      apt:
+        upgrade: dist
+        force_apt_get: yes
       
     - name: Install required Python packages
       apt:

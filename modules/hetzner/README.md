@@ -10,6 +10,7 @@
 |------|---------|
 | <a name="provider_external"></a> [external](#provider\_external) | n/a |
 | <a name="provider_hcloud"></a> [hcloud](#provider\_hcloud) | ~> 1.45 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
@@ -35,6 +36,10 @@ No modules.
 | [hcloud_ssh_key.cluster_workers](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) | resource |
 | [hcloud_ssh_key.db](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) | resource |
 | [hcloud_ssh_key.redis](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) | resource |
+| [random_password.control_plane_root_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [random_password.db_pass](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [random_password.redis_pass](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [random_password.workers_root_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [external_external.cluster_control_key](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
 | [external_external.cluster_worker_key](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
 | [external_external.db_key](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
@@ -57,7 +62,6 @@ No modules.
 | <a name="input_server_image"></a> [server\_image](#input\_server\_image) | Server image for the Kubernetes nodes, check the Hetzner Cloud API for available images | `string` | `"ubuntu-20.04"` | no |
 | <a name="input_server_location"></a> [server\_location](#input\_server\_location) | Server location for the Kubernetes nodes, check the Hetzner Cloud API for available locations | `string` | `"nbg1"` | no |
 | <a name="input_server_type"></a> [server\_type](#input\_server\_type) | Server type for the Kubernetes nodes, check the Hetzner Cloud API for available types | `string` | `"cx22"` | no |
-| <a name="input_ssh_key_passphrase"></a> [ssh\_key\_passphrase](#input\_ssh\_key\_passphrase) | Passphrase for the SSH keys used in the infrastructure | `string` | n/a | yes |
 | <a name="input_vpc_net_cidr"></a> [vpc\_net\_cidr](#input\_vpc\_net\_cidr) | CIDR range for the VPC network | `string` | `"10.0.0.0/16"` | no |
 
 ## Outputs
@@ -66,9 +70,18 @@ No modules.
 |------|-------------|
 | <a name="output_control_plane_ips"></a> [control\_plane\_ips](#output\_control\_plane\_ips) | List of public IPs for control plane nodes |
 | <a name="output_control_plane_ssh_key_name"></a> [control\_plane\_ssh\_key\_name](#output\_control\_plane\_ssh\_key\_name) | Name of the SSH key for the control plane nodes |
+| <a name="output_control_plane_ssh_key_path"></a> [control\_plane\_ssh\_key\_path](#output\_control\_plane\_ssh\_key\_path) | Path to the SSH key for the control plane nodes |
+| <a name="output_db_internal_ip"></a> [db\_internal\_ip](#output\_db\_internal\_ip) | Private IP for the database server |
 | <a name="output_db_ip"></a> [db\_ip](#output\_db\_ip) | Private IP for the database server |
+| <a name="output_db_server_root_password"></a> [db\_server\_root\_password](#output\_db\_server\_root\_password) | Root password for the database server |
 | <a name="output_db_ssh_key_name"></a> [db\_ssh\_key\_name](#output\_db\_ssh\_key\_name) | Name of the SSH key for the database server |
+| <a name="output_db_ssh_key_path"></a> [db\_ssh\_key\_path](#output\_db\_ssh\_key\_path) | Path to the SSH key for the database server |
+| <a name="output_public_subnet_cidr"></a> [public\_subnet\_cidr](#output\_public\_subnet\_cidr) | CIDR block for the public subnet |
+| <a name="output_redis_internal_ip"></a> [redis\_internal\_ip](#output\_redis\_internal\_ip) | Private IP for the database server |
 | <a name="output_redis_ip"></a> [redis\_ip](#output\_redis\_ip) | Private IP for the Redis server |
+| <a name="output_redis_server_root_password"></a> [redis\_server\_root\_password](#output\_redis\_server\_root\_password) | Root password for the Redis server |
 | <a name="output_redis_ssh_key_name"></a> [redis\_ssh\_key\_name](#output\_redis\_ssh\_key\_name) | Name of the SSH key for the Redis server |
+| <a name="output_redis_ssh_key_path"></a> [redis\_ssh\_key\_path](#output\_redis\_ssh\_key\_path) | Path to the SSH key for the Redis server |
 | <a name="output_worker_ips"></a> [worker\_ips](#output\_worker\_ips) | List of public IPs for worker nodes |
 | <a name="output_worker_ssh_key_name"></a> [worker\_ssh\_key\_name](#output\_worker\_ssh\_key\_name) | Name of the SSH key for the worker nodes |
+| <a name="output_worker_ssh_key_path"></a> [worker\_ssh\_key\_path](#output\_worker\_ssh\_key\_path) | Path to the SSH key for the worker nodes |

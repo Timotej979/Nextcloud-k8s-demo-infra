@@ -77,6 +77,27 @@ resource "hcloud_firewall" "worker_firewall" {
     port       = "22"
     source_ips = ["0.0.0.0/0", "::/0"]
   }
+  # Allow access to port 80 (HTTP)
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "80"
+    source_ips = [ hcloud_load_balancer.ingress.ipv4 ]
+  }
+  # Allow access to port 443 (HTTPS)
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "443"
+    source_ips = [ hcloud_load_balancer.ingress.ipv4 ]
+  }
+  # Allow access to traefik pannel (port 8080)
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "8080"
+    source_ips = [ hcloud_load_balancer.ingress.ipv4 ]
+  }
   # Allow communication to the Kubelet API (port 6444)
   rule {
     direction  = "in"

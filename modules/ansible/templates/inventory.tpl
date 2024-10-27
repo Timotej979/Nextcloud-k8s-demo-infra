@@ -1,7 +1,5 @@
 [control_plane]
-%{ for ip in control_plane_ips }
-${ip} ansible_host=${ip} ansible_user=root ansible_ssh_private_key_file=${control_plane_ssh_key_path} ansible_ssh_common_args='-o ForwardAgent=yes -o StrictHostKeyChecking=no'
-%{ endfor }
+${control_plane_ip} ansible_host=${control_plane_ip} ansible_user=root ansible_ssh_private_key_file=${control_plane_ssh_key_path} ansible_ssh_common_args='-o ForwardAgent=yes -o StrictHostKeyChecking=no'
 
 [workers]
 %{ for ip in worker_ips }

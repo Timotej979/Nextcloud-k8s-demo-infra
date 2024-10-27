@@ -37,6 +37,7 @@ resource "hcloud_server" "db" {
     project     = var.project
     environment = var.environment
     role        = "db"
+    location    = var.server_location
   }
   depends_on = [ hcloud_network_subnet.private_db, hcloud_ssh_key.db ]
 }
@@ -68,6 +69,7 @@ resource "hcloud_server" "redis" {
     project     = var.project
     environment = var.environment
     role        = "redis"
+    location    = var.server_location
   }
   depends_on = [ hcloud_network_subnet.private_redis, hcloud_ssh_key.redis ]
 }
