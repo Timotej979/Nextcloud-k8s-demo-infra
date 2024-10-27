@@ -3,7 +3,7 @@
 
 <div align="center">
   <img src="./docs/assets/hetzner.png" width="100">
-  <img src="./docs/assets/k3s.png" width="=80">
+  <img src="./docs/assets/k3s.png" width="=30">
   <img src="./docs/assets/ansible.png" width="100">
 </div>
 
@@ -73,4 +73,4 @@ The infrastructure of the demo is composed of the following components:
   - 1x helm chart for Nginx Ingress Controller (Connected to the Hetzner load balancer through annotations)
   - 1x helm chart for Nextcloud
 
-[<img src="./docs/assets/arch.png" width="800" />](./docs/assets/arch.png)
+[<img src="./docs/assets/arch.png" width="1000" />](./docs/assets/arch.png)
