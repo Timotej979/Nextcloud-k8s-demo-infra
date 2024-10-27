@@ -3,7 +3,7 @@
 
 <div align="center">
   <img src="./docs/assets/hetzner.png" width="100">
-  <img src="./docs/assets/k3s.png" width="=250">
+  <img src="./docs/assets/k3s.png" width="=80">
   <img src="./docs/assets/ansible.png" width="100">
 </div>
 
@@ -18,11 +18,11 @@ A demo infrastructure for NextCloud running on a self-managed/instaled k3s clust
 - Install Terraform (IaC)
 - Install Helm      (Deployments)
 
-!! :warning: The ansible module modifies the SSH keys directly in the ~/.ssh/* directory :warning: !!
+:warning: The ansible module modifies the SSH keys directly in the ~/.ssh/* directory :warning:
 
-!! :warning: The ansible module will overwrite the current ~/.ssh/config configuration :warning: !!
+:warning: The ansible module will overwrite the current ~/.ssh/config configuration :warning:
 
-!! :warning: The ansible module creates a new ~/.kube/nextcloud_demo_kubeconfig configuration file :warning: !!
+:warning: The ansible module creates a new ~/.kube/nextcloud_demo_kubeconfig configuration file :warning:
 
 ## Automatic documentation generation
 
@@ -73,4 +73,4 @@ The infrastructure of the demo is composed of the following components:
   - 1x helm chart for Nginx Ingress Controller (Connected to the Hetzner load balancer through annotations)
   - 1x helm chart for Nextcloud
 
-[<img src="./docs/assets/arch.png" width="500" />](./docs/assets/arch.png)
+[<img src="./docs/assets/arch.png" width="800" />](./docs/assets/arch.png)
